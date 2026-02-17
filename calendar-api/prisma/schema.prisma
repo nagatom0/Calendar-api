@@ -23,31 +23,25 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      Role
-  schedules Schedule[]
+  role Role @default(USER)
   appointments Appointment[]
   createdAt DateTime @default(now())
-}
-
-model Schedule {
-  id        String   @id @default(uuid())
-  userId    String
-  dayOfWeek Int
-  startTime String
-  endTime   String
-
-  user User @relation(fields: [userId], references: [id])
 }
 
 model Appointment {
   id        String   @id @default(uuid())
   userId    String
-  scheduleId String
-  date      DateTime
-  startTime String
-  endTime   String
+  startTime DateTime
+  endTime   DateTime
   status    AppointmentStatus @default(SCHEDULED)
   createdAt DateTime @default(now())
-
+  roomId    String
+  room Room @relation(fields: [roomId], references: [id])
   user User @relation(fields: [userId], references: [id])
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  name      String
+  appointments Appointment[]
 }
